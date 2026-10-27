@@ -91,3 +91,18 @@ Open http://127.0.0.1:8000/ in your browser.
 Manish Kumar
 
 GitHub: https://github.com/manish-kumar-dev-17
+
+
+
+
+
+## Application Screenshots
+
+### Homepage
+![ShopEase Homepage](screenshots/homepage.png)
+
+### Shopping Cart
+![ShopEase Shopping Cart](screenshots/cart.png)
+
+### Order History
+![ShopEase Order History](screenshots/orders.png)
