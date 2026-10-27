@@ -1,0 +1,152 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Account | ShopEase</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Shop<span>Ease.</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/#products">Products</a>
+        <a href="/#about">About</a>
+    </nav>
+
+    <div class="nav-actions">
+        <a href="{% url 'cart' %}" class="cart-btn">
+            🛒 Cart
+        </a>
+
+        <a href="{% url 'logout' %}" class="login-btn">
+            Logout
+        </a>
+    </div>
+</header>
+
+<main class="dashboard-container">
+
+    <div class="dashboard-heading">
+        <p class="eyebrow">CUSTOMER ACCOUNT</p>
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p>Manage your ShopEase account and shopping activities.</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <!-- Profile Card -->
+        <div class="dashboard-card profile-card">
+
+            <div class="dashboard-icon">👤</div>
+
+            <h2>My Profile</h2>
+
+            <div class="profile-details">
+
+                <p>
+                    <strong>Username:</strong>
+                    {{ user.username }}
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    {% if user.email %}
+                        {{ user.email }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </p>
+
+                <p>
+                    <strong>First Name:</strong>
+                    {{ user.first_name|default:"Not provided" }}
+                </p>
+
+                <p>
+                    <strong>Last Name:</strong>
+                    {{ user.last_name|default:"Not provided" }}
+                </p>
+
+                <p>
+                    <strong>Member Since:</strong>
+                    {{ user.date_joined|date:"d M Y" }}
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- Orders Card -->
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">📦</div>
+
+            <h2>My Orders</h2>
+
+            <p>
+                View your purchases and track your orders.
+            </p>
+
+            <span class="coming-soon">
+                Order history coming soon
+            </span>
+
+        </div>
+
+        <!-- Shopping Card -->
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">🛍️</div>
+
+            <h2>Continue Shopping</h2>
+
+            <p>
+                Explore our latest products and discover
+                something you love.
+            </p>
+
+            <a href="/#products" class="dashboard-btn">
+                Explore Products →
+            </a>
+
+        </div>
+
+        <!-- Cart Card -->
+        <div class="dashboard-card">
+
+    <div class="dashboard-icon">📦</div>
+
+    <h2>My Orders</h2>
+
+    <p>
+        View your previous purchases and check
+        the status of your orders.
+    </p>
+
+    <a href="{% url 'order_history' %}" class="dashboard-btn">
+        View My Orders →
+    </a>
+
+</div>
+
+    </div>
+
+</main>
+
+<footer>
+    <p>© 2026 ShopEase. Developed by Manish Kumar.</p>
+    <p>CodeAlpha Full Stack Development Internship Project</p>
+</footer>
+
+</body>
+</html>

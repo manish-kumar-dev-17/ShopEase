@@ -1,0 +1,158 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details | ShopEase</title>
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Shop<span>Ease.</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="{% url 'order_history' %}">My Orders</a>
+        <a href="{% url 'account' %}">My Account</a>
+    </nav>
+
+    <div class="nav-actions">
+        <a href="{% url 'logout' %}" class="login-btn">Logout</a>
+    </div>
+</header>
+
+<main class="orders-container">
+
+    <div class="orders-heading">
+        <p class="eyebrow">ORDER INFORMATION</p>
+        <h1>Order #{{ order.id }}</h1>
+        <p>Placed on {{ order.created_at|date:"d M Y, h:i A" }}</p>
+    </div>
+
+    <div class="detail-card">
+
+        <div class="detail-header">
+            <h2>Order Status</h2>
+            <span class="order-status">{{ order.status }}</span>
+        </div>
+
+        <!-- ORDER TRACKING TIMELINE -->
+
+        {% if order.status == 'Cancelled' %}
+
+        <div class="tracking-cancelled">
+            <span>✕</span>
+            <h3>Order Cancelled</h3>
+            <p>This order has been cancelled.</p>
+        </div>
+
+        {% else %}
+
+        <div class="tracking-section">
+
+            <h2 class="detail-section-title">Track Your Order</h2>
+
+            <div class="tracking-timeline">
+
+                <div class="tracking-step {% if order.status == 'Pending' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}completed{% endif %}">
+                    <div class="tracking-circle">1</div>
+                    <h4>Order Placed</h4>
+                    <p>Order received</p>
+                </div>
+
+                <div class="tracking-step {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}completed{% endif %}">
+                    <div class="tracking-circle">2</div>
+                    <h4>Processing</h4>
+                    <p>Preparing order</p>
+                </div>
+
+                <div class="tracking-step {% if order.status == 'Shipped' or order.status == 'Delivered' %}completed{% endif %}">
+                    <div class="tracking-circle">3</div>
+                    <h4>Shipped</h4>
+                    <p>On the way</p>
+                </div>
+
+                <div class="tracking-step {% if order.status == 'Delivered' %}completed{% endif %}">
+                    <div class="tracking-circle">4</div>
+                    <h4>Delivered</h4>
+                    <p>Order delivered</p>
+                </div>
+
+            </div>
+
+            <p class="tracking-current">
+                Current Status: <strong>{{ order.status }}</strong>
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        <!-- PURCHASED PRODUCTS -->
+
+        <h2 class="detail-section-title">Purchased Products</h2>
+
+        {% for item in order.items.all %}
+
+        <div class="detail-product">
+            <div>
+                <h3>{{ item.product_name }}</h3>
+                <p>Quantity: {{ item.quantity }}</p>
+                <p>Price: ₹{{ item.price }}</p>
+            </div>
+
+            <strong>₹{{ item.subtotal }}</strong>
+        </div>
+
+        {% endfor %}
+
+        <div class="detail-total">
+            <span>Order Total</span>
+            <strong>₹{{ order.total_amount }}</strong>
+        </div>
+
+        <!-- DELIVERY INFORMATION -->
+
+        <h2 class="detail-section-title">Delivery Information</h2>
+
+        <div class="delivery-details">
+            <p><strong>Name:</strong> {{ order.full_name }}</p>
+            <p><strong>Phone:</strong> {{ order.phone }}</p>
+            <p><strong>Address:</strong> {{ order.address }}</p>
+            <p><strong>City:</strong> {{ order.city }}</p>
+            <p><strong>State:</strong> {{ order.state }}</p>
+            <p><strong>PIN Code:</strong> {{ order.pincode }}</p>
+        </div>
+
+        <!-- PAYMENT INFORMATION -->
+
+        <h2 class="detail-section-title">Payment Information</h2>
+
+        <p>
+            <strong>Payment Method:</strong>
+            {{ order.get_payment_method_display }}
+        </p>
+
+        <p>
+            <strong>Payment Type:</strong>
+            Pay on Delivery
+        </p>
+
+        <a href="{% url 'order_history' %}" class="dashboard-btn">
+            ← Back to My Orders
+        </a>
+
+    </div>
+
+</main>
+
+<footer>
+    <p>© 2026 ShopEase. Developed by Manish Kumar.</p>
+    <p>CodeAlpha Full Stack Development Internship Project</p>
+</footer>
+
+</body>
+</html>

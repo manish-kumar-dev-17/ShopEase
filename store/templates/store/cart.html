@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | ShopEase</title>
+
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVIGATION
+         ========================= -->
+
+    <header class="navbar">
+
+        <a href="{% url 'home' %}" class="logo">
+            Shop<span>Ease.</span>
+        </a>
+
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'home' %}#products">Products</a>
+            <a href="{% url 'cart' %}">My Cart</a>
+        </nav>
+
+        <div class="nav-actions">
+
+            {% if request.user.is_authenticated %}
+
+                <span>Hi, {{ request.user.username }}</span>
+
+                <a href="{% url 'logout' %}" class="login-btn">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="login-btn">
+                    Login
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         CART
+         ========================= -->
+
+    <main class="cart-container">
+
+        <div class="checkout-heading">
+
+            <p class="eyebrow">SHOPPING CART</p>
+
+            <h1>My Shopping Cart</h1>
+
+            <p>
+                Review your products before placing your order.
+            </p>
+
+        </div>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <p class="checkout-message">
+                    {{ message }}
+                </p>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        {% if cart_items %}
+
+            <!-- =========================
+                 CART ITEMS
+                 ========================= -->
+
+            {% for item in cart_items %}
+
+                <div class="cart-item">
+
+                    {% if item.product.image_url %}
+
+                        <img
+                            src="{{ item.product.image_url }}"
+                            alt="{{ item.product.name }}"
+                            width="100"
+                        >
+
+                    {% endif %}
+
+
+                    <div class="cart-details">
+
+                        <h3>
+                            {{ item.product.name }}
+                        </h3>
+
+
+                        <p>
+                            Price:
+                            ₹{{ item.product.price|floatformat:2 }}
+                        </p>
+
+
+                        <p>
+                            Current Quantity:
+                            {{ item.quantity }}
+                        </p>
+
+
+                        <p>
+                            Subtotal:
+                            ₹{{ item.total_price|floatformat:2 }}
+                        </p>
+
+
+                        <!-- UPDATE QUANTITY -->
+
+                        <form
+                            action="{% url 'update_cart' item.product.id %}"
+                            method="POST"
+                        >
+
+                            {% csrf_token %}
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                value="{{ item.quantity }}"
+                                min="0"
+                                required
+                            >
+
+                            <button type="submit">
+                                Update Quantity
+                            </button>
+
+                        </form>
+
+
+                        <!-- REMOVE ITEM -->
+
+                        <form
+                            action="{% url 'remove_from_cart' item.product.id %}"
+                            method="POST"
+                        >
+
+                            {% csrf_token %}
+
+                            <button type="submit">
+                                Remove
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+            {% endfor %}
+
+
+            <!-- =========================
+                 CART TOTAL
+                 ========================= -->
+
+            <div class="cart-total-section">
+
+                <h2>
+                    Total Amount:
+                    ₹{{ total|floatformat:2 }}
+                </h2>
+
+
+                <!-- CHECKOUT BUTTON -->
+
+                <a
+                    href="{% url 'checkout' %}"
+                    class="place-order-btn checkout-btn"
+                >
+                    Proceed to Checkout
+                </a>
+
+
+                <a
+                    href="{% url 'home' %}"
+                    class="back-cart-btn"
+                >
+                    ← Continue Shopping
+                </a>
+
+            </div>
+
+
+        {% else %}
+
+            <!-- =========================
+                 EMPTY CART
+                 ========================= -->
+
+            <div class="empty-cart">
+
+                <h3>
+                    Your shopping cart is empty.
+                </h3>
+
+                <p>
+                    Add some products to get started!
+                </p>
+
+                <a
+                    href="{% url 'home' %}"
+                    class="place-order-btn"
+                >
+                    Start Shopping
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer>
+
+        <p>
+            © 2026 ShopEase. Developed by Manish Kumar.
+        </p>
+
+        <p>
+            CodeAlpha Full Stack Development Internship Project
+        </p>
+
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | ShopEase</title>
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Shop<span>Ease.</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/#products">Products</a>
+        <a href="{% url 'cart' %}">My Cart</a>
+    </nav>
+
+    <div class="nav-actions">
+        <span>Hi, {{ request.user.username }}</span>
+        <a href="{% url 'logout' %}" class="login-btn">Logout</a>
+    </div>
+</header>
+
+<main class="checkout-container">
+
+    <div class="checkout-heading">
+        <p class="eyebrow">SHOP WITH CONFIDENCE</p>
+        <h1>Complete Your Order</h1>
+        <p>Enter your delivery information to place your order.</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="checkout-message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <div class="checkout-layout">
+
+        <section class="checkout-form-card">
+            <h2>Delivery Information</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label>Full Name</label>
+                <input type="text" name="full_name"
+                       value="{{ request.user.get_full_name }}"
+                       maxlength="150" required>
+
+                <label>Phone Number</label>
+                <input type="tel" name="phone"
+                       maxlength="15" required
+                       placeholder="Enter your phone number">
+
+                <label>Delivery Address</label>
+                <textarea name="address" rows="3"
+                          required placeholder="House number, street and area"></textarea>
+
+                <label>City</label>
+                <input type="text" name="city" maxlength="100" required>
+
+                <label>State</label>
+                <input type="text" name="state" maxlength="100" required>
+
+                <label>PIN Code</label>
+                <input type="text" name="pincode"
+                       maxlength="6" minlength="6"
+                       pattern="[0-9]{6}" required
+                       placeholder="6-digit PIN code">
+
+                <h3>Payment Method</h3>
+
+                <div class="payment-option">
+                    <input type="radio" checked disabled>
+                    <span>Cash on Delivery (COD)</span>
+                </div>
+
+                <button type="submit" class="place-order-btn">
+                    Place Order
+                </button>
+            </form>
+        </section>
+
+        <aside class="order-summary-card">
+            <h2>Order Summary</h2>
+
+            {% for item in cart_items %}
+                <div class="summary-item">
+                    <div>
+                        <strong>{{ item.product.name }}</strong>
+                        <p>Quantity: {{ item.quantity }}</p>
+                    </div>
+
+                    <strong>₹{{ item.total_price }}</strong>
+                </div>
+            {% endfor %}
+
+            <div class="summary-total">
+                <span>Total Amount</span>
+                <strong>₹{{ total }}</strong>
+            </div>
+
+            <p class="cod-note">
+                Payment will be collected when your order is delivered.
+            </p>
+
+            <a href="{% url 'cart' %}" class="back-cart-btn">
+                ← Back to Cart
+            </a>
+        </aside>
+
+    </div>
+</main>
+
+<footer>
+    <p>© 2026 ShopEase. Developed by Manish Kumar.</p>
+    <p>CodeAlpha Full Stack Development Internship Project</p>
+</footer>
+
+</body>
+</html>
