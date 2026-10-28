@@ -28,7 +28,7 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY =  os.getenv('django-insecure-9tnem-pofy6wz+9ufxr)@rqccok!y4o+v20=c(l4qkjiw#007b')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS", "localhost,127.0.0.1"
@@ -83,8 +83,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 
-import dj_database_url
-
 if os.getenv("DATABASE_URL"):
     DATABASES = {
         "default": dj_database_url.parse(
@@ -100,6 +98,7 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
 
 
 
