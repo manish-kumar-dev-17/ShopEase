@@ -35,10 +35,18 @@ ALLOWED_HOSTS = os.getenv(
     "localhost,127.0.0.1,shopease-sncd.onrender.com"
 ).split(",")
 
-ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS if host.strip()]
-CSRF_TRUSTED_ORIGINS = [
-    "https://shopease-sncd.onrender.com",
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
 ]
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Keep any additional domains you actually use here.
+ALLOWED_HOSTS.append("shopease-sncd.onrender.com")
 
 
 # Application definition
